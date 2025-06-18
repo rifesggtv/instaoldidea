@@ -1,0 +1,1336 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>InstaOldIdea</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700&display=swap" rel="stylesheet">
+    <!-- Font Awesome para iconos -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f0e6d6; /* Color envejecido similar al mapa */
+            color: #4a4a4a;
+            line-height: 1.6;
+            background-image: url('https://e1.pxfuel.com/wallpaper/498/107/desktop-wallpaper-old-paper-texture-beige-paper-background-old-paper.jpg'); /* Textura de lienzo viejo */
+            background-size: cover;
+            background-attachment: fixed;
+            position: relative;
+        }
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: url('https://upload.wikimedia.org/wikipedia/commons/thumb/3/38/Leonardo_da_Vinci_-_presumed_self-portrait_-_WGA12798.jpg/1200px-Leonardo_da_Vinci_-_presumed_self-portrait_-_WGA12798.jpg'); /* Dibujo de Leonardo */
+            background-repeat: no-repeat;
+            background-position: center 20%; /* Ajusta la posición de la imagen */
+            background-size: 80%; /* Ajusta el tamaño de la imagen */
+            filter: blur(8px) opacity(0.3); /* Borroso y transparente */
+            z-index: -1; /* Envía la imagen al fondo */
+            pointer-events: none; /* Asegura que no interfiera con los clics */
+        }
+        .container {
+            max-width: 960px;
+            margin: 0 auto;
+            padding: 2rem;
+            background-color: rgba(253, 245, 230, 0.9); /* Fondo semitransparente para el contenido */
+            border-radius: 12px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            border: 2px solid #b8a28e; /* Borde que simula un pergamino antiguo */
+            position: relative; /* Asegura que esté por encima del fondo del body */
+            z-index: 1;
+        }
+        .header {
+            border-bottom: 2px solid #b8a28e;
+            padding-bottom: 1rem;
+            margin-bottom: 2rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+        }
+        .logo-text {
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: #6d4c3d;
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.1);
+            margin: 0 1rem;
+        }
+        .logo-ioi {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 60px;
+            height: 60px;
+            background-color: #8b4513;
+            color: #fff;
+            border-radius: 50%;
+            font-size: 1.8rem;
+            font-weight: 700;
+            box-shadow: inset 0 2px 4px rgba(0,0,0,0.2);
+        }
+        .header-icons {
+            position: absolute;
+            right: 0;
+            top: 50%;
+            transform: translateY(-50%);
+            display: flex;
+            gap: 0.8rem;
+        }
+        .header-icon {
+            font-size: 1.5rem;
+            color: #6d4c3d;
+            cursor: pointer;
+            transition: color 0.2s;
+        }
+        .header-icon:hover {
+            color: #8b4513;
+        }
+        .section-title {
+            font-size: 1.8rem;
+            color: #6d4c3d;
+            margin-bottom: 1.5rem;
+            border-bottom: 1px dashed #b8a28e;
+            padding-bottom: 0.5rem;
+        }
+        .input-field, .color-selector {
+            border: 1px solid #b8a28e;
+            background-color: #fffcf2;
+            padding: 0.8rem;
+            border-radius: 8px;
+            transition: all 0.2s;
+            appearance: none;
+            -webkit-appearance: none;
+            -moz-appearance: none;
+            background-image: url('data:image/svg+xml;utf8,<svg fill="%234a4a4a" height="24" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><path d="M7 10l5 5 5-5z"/><path d="M0 0h24v24H0z" fill="none"/></svg>');
+            background-repeat: no-repeat;
+            background-position: right 0.7em top 50%;
+            background-size: 1.5em auto;
+            cursor: pointer;
+        }
+        .input-field:focus, .color-selector:focus {
+            border-color: #8b4513;
+            box-shadow: 0 0 0 2px rgba(139, 69, 19, 0.2);
+            outline: none;
+        }
+        .button-primary {
+            background-color: #8b4513;
+            color: #fff;
+            padding: 0.8rem 1.5rem;
+            border-radius: 8px;
+            font-weight: 700;
+            transition: background-color 0.2s, transform 0.1s;
+        }
+        .button-primary:hover {
+            background-color: #6d4c3d;
+            transform: translateY(-1px);
+        }
+        .button-primary:active {
+            transform: translateY(0);
+        }
+        .button-secondary {
+            background-color: #b8a28e;
+            color: #6d4c3d;
+            padding: 0.8rem 1.5rem;
+            border-radius: 8px;
+            font-weight: 700;
+            transition: background-color 0.2s, transform 0.1s;
+        }
+        .button-secondary:hover {
+            background-color: #a3907c;
+            transform: translateY(-1px);
+        }
+        .color-box {
+            width: 80px;
+            height: 80px;
+            border: 1px solid #b8a28e;
+            border-radius: 8px;
+            box-shadow: inset 0 1px 3px rgba(0,0,0,0.1);
+        }
+        .shadow-gradient-box {
+            width: 60px;
+            height: 60px;
+            border-radius: 8px;
+        }
+        #loadingMessage {
+            display: none;
+            text-align: center;
+            margin-top: 1rem;
+            font-style: italic;
+            color: #6d4c3d;
+        }
+        .color-option {
+            color: #4a4a4a;
+        }
+        #generatedIdeaContainer {
+            background-color: #fffcf2;
+            border: 1px solid #b8a28e;
+            padding: 1rem;
+            border-radius: 8px;
+            min-height: 80px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+        }
+        #shortDrawingIdea {
+            font-size: 1.25rem;
+            font-weight: 700;
+            color: #6d4c3d;
+            margin-bottom: 0.5rem;
+        }
+        #keywordsOutput {
+            font-size: 0.9em;
+            font-style: italic;
+            color: #4a4a4a;
+        }
+        .pinterest-search-group {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+            width: 100%;
+        }
+        /* Estilos del canvas de dibujo */
+        #drawingCanvas {
+            border: 2px solid #555; /* Borde más oscuro como en tu ejemplo */
+            background: white; /* Fondo blanco inicial */
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            touch-action: none;
+            width: 100%;
+            height: 400px;
+            display: block;
+            margin: 0 auto;
+        }
+        .toolbar {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.75rem;
+            margin-top: 1.5rem;
+            padding: 1rem;
+            background-color: #fdf5e6;
+            border: 1px solid #b8a28e;
+            border-radius: 8px;
+            justify-content: center;
+            align-items: center;
+        }
+        .tool-button {
+            background-color: #e0d2c2;
+            color: #6d4c3d;
+            padding: 0.6rem 1rem;
+            border-radius: 6px;
+            font-weight: 600;
+            transition: background-color 0.2s, transform 0.1s;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        .tool-button:hover {
+            background-color: #d2c4b4;
+            transform: translateY(-1px);
+        }
+        .tool-button.active {
+            background-color: #8b4513;
+            color: #fff;
+        }
+        .tool-button i {
+            font-size: 1.1rem;
+        }
+        .tool-input {
+            border: 1px solid #b8a28e;
+            background-color: #fffcf2;
+            padding: 0.6rem;
+            border-radius: 6px;
+            width: 80px;
+        }
+        .color-palette-tool {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+            max-width: 150px;
+        }
+        .color-sample {
+            width: 25px;
+            height: 25px;
+            border: 1px solid #b8a28e;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: transform 0.1s;
+        }
+        .color-sample:hover {
+            transform: scale(1.1);
+        }
+        /* Ajustes para los input de color y rango para que se vean mejor */
+        input[type="range"] {
+            -webkit-appearance: none;
+            width: 100%;
+            height: 8px;
+            background: #d3d3d3;
+            outline: none;
+            opacity: 0.7;
+            transition: opacity .2s;
+            border-radius: 4px;
+        }
+
+        input[type="range"]::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            appearance: none;
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            background: #8b4513;
+            cursor: pointer;
+            box-shadow: 0 0 2px rgba(0,0,0,0.3);
+        }
+
+        input[type="range"]::-moz-range-thumb {
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            background: #8b4513;
+            cursor: pointer;
+            box-shadow: 0 0 2px rgba(0,0,0,0.3);
+        }
+        input[type="color"] {
+            -webkit-appearance: none;
+            -moz-appearance: none;
+            appearance: none;
+            width: 40px; /* Tamaño del color picker */
+            height: 40px;
+            border: none;
+            background: none;
+            cursor: pointer;
+            padding: 0;
+        }
+        input[type="color"]::-webkit-color-swatch-wrapper {
+            padding: 0;
+        }
+        input[type="color"]::-webkit-color-swatch {
+            border-radius: 8px;
+            border: 1px solid #b8a28e;
+        }
+        input[type="color"]::-moz-color-swatch-wrapper {
+            padding: 0;
+        }
+        input[type="color"]::-moz-color-swatch {
+            border-radius: 8px;
+            border: 1px solid #b8a28e;
+        }
+    </style>
+</head>
+<body class="p-4">
+    <div class="container my-8">
+        <!-- Encabezado y Logo -->
+        <header class="header flex items-center justify-center mb-8">
+            <div class="header-icons" style="left: 0; right: auto;">
+                <i class="fas fa-palette header-icon"></i>
+                <i class="fas fa-lightbulb header-icon"></i>
+            </div>
+            <div class="logo-ioi">IOI</div>
+            <h1 class="logo-text">InstaOldIdea</h1>
+            <div class="header-icons">
+                <i class="fas fa-brush header-icon"></i>
+                <i class="fas fa-paint-roller header-icon"></i>
+            </div>
+        </header>
+
+        <!-- Sección de Inspiración para Dibujo -->
+        <section class="mb-10">
+            <h2 class="section-title">¡Inspírate para tu próxima obra!</h2>
+            <p class="mb-4 text-center">Ingresa lo que estás pensando y obtén una idea para dibujar o diseñar.</p>
+            <div class="flex flex-col md:flex-row items-center space-y-4 md:space-y-0 md:space-x-4">
+                <textarea id="thoughtInput" class="input-field w-full md:w-3/5 h-24" placeholder="Estoy pensando en mi comida, en que agarré un taxi, en que salí cansado de trabajar..."></textarea>
+                <div class="flex flex-col space-y-4 w-full md:w-2/5">
+                    <button id="inspireButton" class="button-primary w-full">¡Inspírate!</button>
+                    
+                    <!-- Contenedor único para la idea generada y palabras clave -->
+                    <div id="generatedIdeaContainer" class="hidden">
+                        <p id="shortDrawingIdea"></p>
+                        <p id="keywordsOutput"></p>
+                    </div>
+
+                    <div class="pinterest-search-group mt-4">
+                        <!-- Recuadro para ingreso de búsqueda del dibujante -->
+                        <input type="text" id="pinterestQueryInput" class="input-field w-full" placeholder="Ingresa tu búsqueda para Pinterest..." disabled>
+                        <!-- Botón con símbolo de pincel -->
+                        <button id="pinterestSearchButton" class="button-primary w-full flex items-center justify-center space-x-2" disabled>
+                            <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M17.414 2.586a2 2 0 00-2.828 0L7 10.172V13h2.828l7.586-7.586a2 2 0 000-2.828z" />
+                                <path fill-rule="evenodd" d="M2 6a2 2 0 012-2h4a1 1 0 010 2H4v10h10v-4a1 1 0 112 0v4a2 2 0 01-2 2H4a2 2 0 01-2-2V6z" clip-rule="evenodd" />
+                            </svg>
+                            <span>Buscar en Pinterest</span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+            <p id="loadingMessage">Generando idea y palabras clave...</p>
+        </section>
+
+        <hr class="border-t-2 border-dashed border-b8a28e my-8">
+
+        <!-- Sección de Combinación y Complemento de Colores -->
+        <section class="mb-10">
+            <h2 class="section-title">Experimenta con Colores</h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                <!-- Entrada de Colores -->
+                <div class="flex flex-col space-y-4">
+                    <label for="color1Select" class="font-bold text-lg text-6d4c3d">Color 1:</label>
+                    <select id="color1Select" class="color-selector w-full"></select>
+                    <div id="color1Visual" class="color-box mx-auto my-2 rounded-full"></div>
+
+                    <label for="color2Select" class="font-bold text-lg text-6d4c3d">Color 2:</label>
+                    <select id="color2Select" class="color-selector w-full"></select>
+                    <div id="color2Visual" class="color-box mx-auto my-2 rounded-full"></div>
+
+                    <label for="color3Select" class="font-bold text-lg text-6d4c3d">Color 3:</label>
+                    <select id="color3Select" class="color-selector w-full"></select>
+                    <div id="color3Visual" class="color-box mx-auto my-2 rounded-full"></div>
+
+                    <div class="flex space-x-4 mt-4 justify-center">
+                        <button id="combineButton" class="button-primary flex-1">Combinar</button>
+                        <button id="complementaryButton" class="button-secondary flex-1">Complementario</button>
+                    </div>
+                </div>
+
+                <!-- Resultados de Colores -->
+                <div class="flex flex-col space-y-4 items-center justify-center">
+                    <h3 class="font-bold text-xl text-6d4c3d">Resultados:</h3>
+                    <div id="combinedColorVisual" class="color-box mb-4 hidden"></div>
+                    <p id="complementaryColorText" class="text-center font-bold text-lg text-6d4c3d hidden">Complementario de <span id="baseColorName"></span>:</p>
+                    <div id="complementaryColorVisual" class="color-box mb-4 hidden"></div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Sección de Sombras Sugeridas -->
+        <section class="mb-10">
+            <h2 class="section-title">Sugerencias de Sombras</h2>
+            <p class="mb-4 text-center">Selecciona un color para ver sugerencias de sombras y un ejemplo de degradado.</p>
+            <select id="shadowColorSelect" class="color-selector w-full mb-4"></select>
+            <button id="generateShadowsButton" class="button-primary w-full md:w-auto mb-6">Generar Sombras</button>
+            <div id="shadowSuggestions" class="mt-4 hidden">
+                <h3 class="font-bold text-lg text-6d4c3d mb-2">Colores de Sombra Sugeridos:</h3>
+                <div id="suggestedShadowColors" class="flex flex-wrap gap-4 justify-center mb-6">
+                    <!-- Las cajas de color de sombra se insertarán aquí -->
+                </div>
+                <h3 class="font-bold text-lg text-6d4c3d mb-2">Ejemplo de Degradado:</h3>
+                <div id="shadowGradientContainer" class="flex justify-center space-x-2">
+                    <!-- Los cuadrados de degradado se insertarán aquí -->
+                </div>
+            </div>
+        </section>
+
+        <hr class="border-t-2 border-dashed border-b8a28e my-8">
+
+        <!-- Sección de Dibujo Online -->
+        <section>
+            <h2 class="section-title">Tu Sketchbook Digital</h2>
+            <div class="flex flex-col items-center">
+                <div class="toolbar w-full">
+                    <!-- Herramientas de Dibujo -->
+                    <label class="flex items-center gap-2">Tamaño:
+                        <input type="range" id="sizePicker" min="1" max="50" value="10" class="tool-input flex-1">
+                        <span id="lineWidthDisplay" class="text-sm text-6d4c3d">10</span>px
+                    </label>
+
+                    <label class="flex items-center gap-2">Color:
+                        <input type="color" id="colorPicker" value="#000000" class="tool-input w-10 h-10 p-0 rounded-md cursor-pointer">
+                    </label>
+
+                    <button id="toolPencil" class="tool-button active"><i class="fas fa-pencil-alt"></i> Lápiz</button>
+                    <button id="toolBrush" class="tool-button"><i class="fas fa-paint-brush"></i> Pincel</button>
+                    <button id="toolEraser" class="tool-button"><i class="fas fa-eraser"></i> Borrador</button>
+                    <button id="toolFill" class="tool-button"><i class="fas fa-fill-drip"></i> Relleno</button>
+                    <button id="toolWatercolor" class="tool-button"><i class="fas fa-tint"></i> Acuarela</button>
+                    
+                    <!-- Tipos de Papel/Fondo -->
+                    <select id="paperType" class="tool-input flex-1">
+                        <option value="#fffcf2">Lienzo Blanco</option>
+                        <option value="#f0e6d6">Papel Envejecido</option>
+                        <option value="#d3d3d3">Gris Claro</option>
+                        <option value="#808080">Gris Medio</option>
+                    </select>
+
+                    <!-- Botones de Acción del Lienzo -->
+                    <button id="clearCanvas" class="tool-button"><i class="fas fa-trash-alt"></i> Limpiar</button>
+                    <button id="saveCanvas" class="tool-button"><i class="fas fa-save"></i> Guardar Imagen</button>
+                </div>
+                <canvas id="drawingCanvas" width="800" height="400" class="mt-6"></canvas>
+            </div>
+        </section>
+    </div>
+
+    <script type="module">
+        // Global variables for Firebase
+        const appId = typeof __app_id !== 'undefined' ? __app_id : 'default-app-id';
+        const firebaseConfig = JSON.parse(typeof __firebase_config !== 'undefined' ? __firebase_config : '{}');
+
+        // Importaciones de Firebase
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
+        import { getAuth, signInAnonymously, signInWithCustomToken } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
+        import { getFirestore, doc, setDoc, getDoc, collection, addDoc } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
+
+        // Inicialización de Firebase
+        let app;
+        let db;
+        let auth;
+        let userId;
+
+        const initializeFirebase = async () => {
+            try {
+                if (Object.keys(firebaseConfig).length > 0) {
+                    app = initializeApp(firebaseConfig);
+                    db = getFirestore(app);
+                    auth = getAuth(app);
+
+                    if (typeof __initial_auth_token !== 'undefined') {
+                        await signInWithCustomToken(auth, __initial_auth_token);
+                    } else {
+                        await signInAnonymously(auth);
+                    }
+                    userId = auth.currentUser?.uid || crypto.randomUUID();
+                    console.log("Firebase inicializado y autenticado.");
+                } else {
+                    console.warn("La configuración de Firebase no está disponible. Algunas funcionalidades pueden estar limitadas.");
+                    // Fallback para userId si Firebase no se inicializa
+                    userId = crypto.randomUUID();
+                }
+            } catch (error) {
+                console.error("Error al inicializar Firebase o autenticarse:", error);
+                // Fallback para userId si Firebase falla
+                userId = crypto.randomUUID();
+            }
+        };
+
+        // Definición de las paletas de colores
+        const colorPalettes = {
+            "Colores Primarios y Secundarios": [
+                { name: "Rojo", hex: "#FF0000" },
+                { name: "Verde", hex: "#00FF00" },
+                { name: "Azul", hex: "#0000FF" },
+                { name: "Amarillo", hex: "#FFFF00" },
+                { name: "Cyan", hex: "#00FFFF" },
+                { name: "Magenta", hex: "#FF00FF" },
+            ],
+            "Colores HTML por Nombre": [
+                { name: "Negro", hex: "#000000" },
+                { name: "Azul Marino", hex: "#000080" },
+                { name: "Azul Oscuro", hex: "#00008B" },
+                { name: "Azul Medio", hex: "#0000CD" },
+                { name: "Azul", hex: "#0000FF" },
+                { name: "Verde Oscuro", hex: "#006400" },
+                { name: "Verde", hex: "#008000" },
+                { name: "Verde Azulado", hex: "#008080" },
+                { name: "Cyan Oscuro", hex: "#008B8B" },
+                { name: "Azul Cielo", hex: "#00BFFF" },
+                { name: "Turquesa Oscuro", hex: "#00CED1" },
+                { name: "Verde Esmeralda", hex: "#00FA9A" },
+                { name: "Lima", hex: "#00FF00" },
+                { name: "Verde Primavera", hex: "#00FF7F" },
+                { name: "Aqua", hex: "#00FFFF" },
+                { name: "Azul Noche", hex: "#191970" },
+                { name: "Azul Dodger", hex: "#1E90FF" },
+                { name: "Verde Menta", hex: "#20B2AA" },
+                { name: "Verde Bosque", hex: "#228B22" },
+                { name: "Verde Mar Oscuro", hex: "#2E8B57" },
+                { name: "Gris Pizarra", hex: "#2F4F4F" },
+                { name: "Verde Lima", hex: "#32CD32" },
+                { name: "Verde Mar", hex: "#3CB371" },
+                { name: "Turquesa", hex: "#40E0D0" },
+                { name: "Azul Real", hex: "#4169E1" },
+                { name: "Gris Pizarra Oscuro", hex: "#4682B4" },
+                { name: "Violeta Oscuro", hex: "#483D8B" },
+                { name: "Turquesa Medio", hex: "#48D1CC" },
+                { name: "Indigo", hex: "#4B0082" },
+                { name: "Verde Oliva", hex: "#556B2F" },
+                { name: "Cadete Azul", hex: "#5F9EA0" },
+                { name: "Azul Maíz", hex: "#6495ED" },
+                { name: "Verde Acuamarina", hex: "#66CDAA" },
+                { name: "Gris Oscuro", hex: "#696969" },
+                { name: "Azul Pizarra", hex: "#6A5ACD" },
+                { name: "Verde Oliva Oscuro", hex: "#6B8E23" },
+                { name: "Gris Pizarra", hex: "#708090" },
+                { name: "Gris Pizarra Claro", hex: "#778899" },
+                { name: "Azul Púrpura Medio", hex: "#7B68EE" },
+                { name: "Verde Pradera", hex: "#7CFC00" },
+                { name: "Verde Chartreuse", hex: "#7FFF00" },
+                { name: "Turquesa Claro", hex: "#7FFFD4" },
+                { name: "Marrón", hex: "#800000" },
+                { name: "Púrpura", hex: "#800080" },
+                { name: "Oliva", hex: "#808000" },
+                { name: "Gris", hex: "#808080" },
+                { name: "Azul Cielo Claro", hex: "#87CEEB" },
+                { name: "Azul Cielo", hex: "#87CEFA" },
+                { name: "Azul Violeta", hex: "#8A2BE2" },
+                { name: "Rojo Oscuro", hex: "#8B0000" },
+                { name: "Magenta Oscuro", hex: "#8B008B" },
+                { name: "Marrón Silla", hex: "#8B4513" },
+                { name: "Verde Mar Medio", hex: "#8FBC8F" },
+                { name: "Verde Pálido", hex: "#90EE90" },
+                { name: "Púrpura Medio", hex: "#9370DB" },
+                { name: "Orquídea Oscura", hex: "#9400D3" },
+                { name: "Verde Claro", hex: "#98FB98" },
+                { name: "Orquídea Oscura", hex: "#9932CC" },
+                { name: "Siena", hex: "#A0522D" },
+                { name: "Marrón Cobre", hex: "#A52A2A" },
+                { name: "Gris Plata", hex: "#A9A9A9" },
+                { name: "Azul Claro", hex: "#ADD8E6" },
+                { name: "Verde Amarillento", hex: "#ADFF2F" },
+                { name: "Azul Cielo Claro", hex: "#AFEEEE" },
+                { name: "Azul Polvo", hex: "#B0C4DE" },
+                { name: "Azul Polvo Claro", hex: "#B0E0E6" },
+                { name: "Ladrillo", hex: "#B22222" },
+                { name: "Oro Oscuro", hex: "#B8860B" },
+                { name: "Orquídea", hex: "#BA55D3" },
+                { name: "Rosa Medio", hex: "#BC8F8F" },
+                { name: "Caqui", hex: "#BDB76B" },
+                { name: "Plata", hex: "#C0C0C0" },
+                { name: "Rojo Violeta", hex: "#C71585" },
+                { name: "Rojo Indio", hex: "#CD5C5C" },
+                { name: "Perú", hex: "#CD853F" },
+                { name: "Chocolate", hex: "#D2691E" },
+                { name: "Trigo", hex: "#D2B48C" },
+                { name: "Gris Claro", hex: "#D3D3D3" },
+                { name: "Cardo", hex: "#D8BFD8" },
+                { name: "Orquídea Púrpura", hex: "#DA70D6" },
+                { name: "Oro Claro", hex: "#DAA520" },
+                { name: "Carmesí", hex: "#DC143C" },
+                { name: "Gris", hex: "#DCDCDC" },
+                { name: "Ciruela", hex: "#DDA0DD" },
+                { name: "Bronceado", hex: "#DEB887" },
+                { name: "Turquesa Pálido", hex: "#E0FFFF" },
+                { name: "Lavanda", hex: "#E6E6FA" },
+                { name: "Salmón Oscuro", hex: "#E9967A" },
+                { name: "Violeta", hex: "#EE82EE" },
+                { name: "Caqui Claro", hex: "#EEE8AA" },
+                { name: "Coral Claro", hex: "#F08080" },
+                { name: "Amarillo Claro", hex: "#F0E68C" },
+                { name: "Azul Alicia", hex: "#F0F8FF" },
+                { name: "Blanco Menta", hex: "#F0FFF0" },
+                { name: "Blanco Nieve", hex: "#F0FFFF" },
+                { name: "Naranja Bronceado", hex: "#F4A460" },
+                { name: "Almendra", hex: "#F5DEB3" },
+                { name: "Beige", hex: "#F5F5DC" },
+                { name: "Blanco Humo", hex: "#F5F5F5" },
+                { name: "Menta Cremoso", hex: "#F5FFFA" },
+                { name: "Blanco Fantasma", hex: "#F8F8FF" },
+                { name: "Salmón", hex: "#FA8072" },
+                { name: "Blanco Antiguo", hex: "#FAEBD7" },
+                { name: "Lino", hex: "#FAF0E6" },
+                { name: "Amarillo Claro", hex: "#FAFAD2" },
+                { name: "Antiguo Blanco", hex: "#FDF5E6" },
+                { name: "Rojo", hex: "#FF0000" },
+                { name: "Magenta", hex: "#FF00FF" },
+                { name: "Rosa Brillante", hex: "#FF1493" },
+                { name: "Naranja Rojo", hex: "#FF4500" },
+                { name: "Tomate", hex: "#FF6347" },
+                { name: "Rosa Caliente", hex: "#FF69B4" },
+                { name: "Coral", hex: "#FF7F50" },
+                { name: "Naranja Oscuro", hex: "#FF8C00" },
+                { name: "Salmón Claro", hex: "#FFA07A" },
+                { name: "Naranja", hex: "#FFA500" },
+                { name: "Rosa Claro", hex: "#FFB6C1" },
+                { name: "Rosa Caliente", hex: "#FFC0CB" },
+                { name: "Oro", hex: "#FFD700" },
+                { name: "Melocotón", hex: "#FFDAB9" },
+                { name: "Navajo Blanco", hex: "#FFDEAD" },
+                { name: "Mocasin", hex: "#FFE4B5" },
+                { name: "Almendra", hex: "#FFE4C4" },
+                { name: "Niebla Rosa", hex: "#FFE4E1" },
+                { name: "Cremoso", hex: "#FFEBCD" },
+                { name: "Flor Blanca", hex: "#FFEFD5" },
+                { name: "Lavanda Rubor", hex: "#FFF0F5" },
+                { name: "Concha de Mar", hex: "#FFF5EE" },
+                { name: "Blanco Leche", hex: "#FFF8DC" },
+                { name: "Maíz Seda", hex: "#FFFACD" },
+                { name: "Blanco Floral", hex: "#FFFAF0" },
+                { name: "Blanco Nieve", hex: "#FFFAFA" },
+                { name: "Amarillo", hex: "#FFFF00" },
+                { name: "Amarillo Claro", hex: "#FFFFE0" },
+                { name: "Blanco Puro", hex: "#FFFFF0" },
+                { name: "Blanco", hex: "#FFFFFF" }
+            ],
+            "Colores Pasteles": [
+                { name: "Rosa Pastel", hex: "#FFD1DC" },
+                { name: "Azul Claro Pastel", hex: "#BFEFFF" },
+                { name: "Verde Menta Pastel", hex: "#AAF0D1" },
+                { name: "Lavanda Suave", hex: "#E6E6FA" },
+                { name: "Melocotón Suave", hex: "#FFE5B4" },
+                { name: "Amarillo Claro Suave", hex: "#FFFFE0" },
+                { name: "Rosa Polvo", hex: "#FADADD" },
+                { name: "Lila Pastel", hex: "#D8BFD8" },
+                { name: "Aqua Suave", hex: "#E0FFFF" },
+                { name: "Menta Pálida", hex: "#F0FFF0" },
+                { name: "Rosa Bébé", hex: "#FFB6C1" },
+                { name: "Bronceado Pálido", hex: "#FFDEAD" },
+                { name: "Púrpura Suave", hex: "#E0BBE4" },
+                { name: "Verde Salvia", hex: "#D5E8D4" }
+            ],
+            "Colores Saturados / Neón": [
+                { name: "Verde Neón", hex: "#39FF14" },
+                { name: "Azul Eléctrico", hex: "#7DF9FF" },
+                { name: "Rojo Brillante", hex: "#FF2400" },
+                { name: "Fucsia Neón", hex: "#FF1493" },
+                { name: "Naranja Brillante", hex: "#FFA500" },
+                { name: "Magenta Neón", hex: "#FF00FF" },
+                { name: "Cyan Neón", hex: "#00FFFF" },
+                { name: "Amarillo Neón", hex: "#FFFF00" },
+                { name: "Verde Brillante", hex: "#00FF00" },
+                { name: "Rojo Vivo", hex: "#FF0000" },
+                { name: "Azul Brillante", hex: "#0000FF" }
+            ],
+            "Escala de Grises": [
+                { name: "Blanco", hex: "#FFFFFF" },
+                { name: "Gris Muy Claro", hex: "#F0F0F0" },
+                { name: "Gris Claro", hex: "#D3D3D3" },
+                { name: "Gris Plata", hex: "#C0C0C0" },
+                { name: "Gris Medio", hex: "#A9A9A9" },
+                { name: "Gris", hex: "#808080" },
+                { name: "Gris Oscuro", hex: "#696969" },
+                { name: "Gris Carbón", hex: "#505050" },
+                { name: "Gris Muy Oscuro", hex: "#2F2F2F" },
+                { name: "Gris Casi Negro", hex: "#1A1A1A" },
+                { name: "Negro", hex: "#000000" }
+            ],
+            "Colores Contrastados": [
+                { name: "Negro", hex: "#000000" },
+                { name: "Blanco", hex: "#FFFFFF" },
+                { name: "Oro", hex: "#FFD700" },
+                { name: "Azul Marino Oscuro", hex: "#00008B" },
+                { name: "Gris Muy Oscuro", hex: "#1E1E1E" },
+                { name: "Cyan", hex: "#00FFFF" },
+                { name: "Magenta", hex: "#FF00FF" },
+                { name: "Naranja Rojo Vivo", hex: "#FF4500" }
+            ]
+        };
+
+        // Función para determinar si un color es claro u oscuro (para el contraste del texto)
+        function isLight(hexColor) {
+            const rgb = colorToRgb(hexColor);
+            if (!rgb) return true; // Fallback
+
+            const r = rgb[0];
+            const g = rgb[1];
+            const b = rgb[2];
+
+            // Formula para la luminancia (ITU-R BT.709)
+            const luminance = (0.2126 * r + 0.7152 * g + 0.0722 * b) / 255;
+            return luminance > 0.5; // Si la luminancia es mayor a 0.5, es claro
+        }
+
+        // Función para poblar el selector de colores
+        function populateColorSelector(selectElement, palettes) {
+            selectElement.innerHTML = ''; // Limpiar opciones existentes
+
+            // Añadir una opción por defecto
+            const defaultOption = document.createElement('option');
+            defaultOption.value = "";
+            defaultOption.textContent = "Selecciona un color";
+            defaultOption.disabled = true;
+            defaultOption.selected = true;
+            selectElement.appendChild(defaultOption);
+
+            for (const category in palettes) {
+                const optgroup = document.createElement('optgroup');
+                optgroup.label = category;
+
+                palettes[category].forEach(color => {
+                    const option = document.createElement('option');
+                    option.value = color.hex;
+                    option.textContent = color.name + " (" + color.hex + ")";
+                    // Intentar que el texto de la opción tenga el color correspondiente
+                    option.style.backgroundColor = color.hex;
+                    // Ajustar el color del texto para contraste
+                    option.style.color = isLight(color.hex) ? '#000000' : '#FFFFFF';
+                    // Añadir borde si el fondo es muy claro (para que el color sea visible)
+                    if (isLight(color.hex)) {
+                        option.style.border = '1px solid #ccc';
+                    }
+                    optgroup.appendChild(option);
+                });
+                selectElement.appendChild(optgroup);
+            }
+        }
+
+        // Función para convertir cualquier formato de color a RGB
+        function colorToRgb(color) {
+            // Un truco para obtener RGB de cualquier formato válido de CSS
+            const tempDiv = document.createElement('div');
+            tempDiv.style.color = color;
+            document.body.appendChild(tempDiv);
+            const rgbString = window.getComputedStyle(tempDiv).color;
+            document.body.removeChild(tempDiv);
+
+            if (rgbString.startsWith('rgb')) {
+                const parts = rgbString.match(/\d+/g);
+                return parts ? parts.map(Number) : null;
+            }
+            return null;
+        }
+
+        // Función para convertir RGB a HEX
+        function rgbToHex(r, g, b) {
+            const toHex = (c) => {
+                const hex = Math.max(0, Math.min(255, c)).toString(16);
+                return hex.length === 1 ? "0" + hex : hex;
+            };
+            return "#" + toHex(r) + toHex(g) + toHex(b);
+        }
+
+        // Función para combinar hasta tres colores (promedio simple de RGB)
+        function combineColors(color1, color2, color3 = null) {
+            const rgb1 = colorToRgb(color1);
+            const rgb2 = colorToRgb(color2);
+
+            if (!rgb1 || !rgb2) return null; // Necesitamos al menos dos colores
+
+            let r = (rgb1[0] + rgb2[0]);
+            let g = (rgb1[1] + rgb2[1]);
+            let b = (rgb1[2] + rgb2[2]);
+            let count = 2;
+
+            if (color3) {
+                const rgb3 = colorToRgb(color3);
+                if (rgb3) {
+                    r += rgb3[0];
+                    g += rgb3[1];
+                    b += rgb3[2];
+                    count++;
+                }
+            }
+
+            r = Math.floor(r / count);
+            g = Math.floor(g / count);
+            b = Math.floor(b / count);
+
+            return rgbToHex(r, g, b);
+        }
+
+        // Función para obtener el color complementario
+        function getComplementaryColor(color) {
+            const rgb = colorToRgb(color);
+            if (!rgb) return null;
+
+            const r = rgb[0];
+            const g = rgb[1];
+            const b = rgb[2];
+
+            // Calcula el complementario restando cada componente de 255
+            const compR = 255 - r;
+            const compG = 255 - g;
+            const compB = 255 - b;
+
+            return rgbToHex(compR, compG, compB);
+        }
+
+        // Lógica del Canvas de Dibujo
+        let canvas, ctx;
+        let painting = false;
+        let currentColor = '#000000';
+        let currentLineWidth = 10;
+        let currentTool = 'pencil';
+        let lastX = 0, lastY = 0;
+
+        // Elementos del canvas (declarados globalmente para accesibilidad)
+        let sizePicker;
+        let colorPicker;
+        let lineWidthDisplay;
+        let paperTypeSelect;
+        let clearCanvasButton;
+        let saveCanvasButton;
+
+        // Base64 de un pincel tipo textura simple (puedes cambiarla por otra)
+        const brushImage = new Image();
+        brushImage.src = 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAwAAAAOCAYAAAA5YZ0XAAAAVUlEQVQoU2NkwAMYo2B8YGRg+I8RgYmBiYHhxMBf1MiDGECrGQ3IK2REkp3DIQg1wSDAyp+AzDnYwKMQRwMhwGWA7mYkGYxxHhMgzgIIm4gcgAABGrQAGzZKcpQAAAABJRU5ErkJggg==';
+        let brushPattern = null;
+
+
+        // Se usa pointerdown/move/up para soporte de stylus y ratón
+        function startPainting(e) {
+            painting = true;
+            // Calcular coordenadas iniciales para startPainting
+            const rect = canvas.getBoundingClientRect();
+            const clientX = e.clientX || (e.touches && e.touches[0] ? e.touches[0].clientX : 0);
+            const clientY = e.clientY || (e.touches && e.touches[0] ? e.touches[0].clientY : 0);
+            lastX = clientX - rect.left;
+            lastY = clientY - rect.top;
+
+            // Relleno se aplica al hacer clic, no arrastrar
+            if (currentTool === 'fill') {
+                ctx.fillStyle = currentColor;
+                ctx.fillRect(0, 0, canvas.width, canvas.height);
+                painting = false; // Detener después de rellenar
+            } else {
+                draw(e); // Dibuja un punto inicial al hacer click/tocar
+            }
+        }
+
+        function stopPainting() {
+            painting = false;
+            ctx.beginPath(); // Resetea el path para nuevas líneas
+        }
+
+        function draw(e) {
+            if (!painting) return;
+
+            const rect = canvas.getBoundingClientRect();
+            // Usar e.clientX/Y para mouse, e.touches[0].clientX/Y para touch, y e.x/y para pointerevent si está disponible
+            const clientX = e.clientX || (e.touches && e.touches[0] ? e.touches[0].clientX : 0);
+            const clientY = e.clientY || (e.touches && e.touches[0] ? e.touches[0].clientY : 0);
+
+            const x = clientX - rect.left;
+            const y = clientY - rect.top;
+
+            let pressure = 1.0;
+            if (e.pressure !== undefined) { // Soporte para presión de stylus
+                pressure = e.pressure;
+            }
+
+            const size = currentLineWidth * pressure;
+
+            ctx.lineWidth = size;
+            ctx.lineCap = "round";
+            ctx.lineJoin = "round";
+            
+            // Lógica de herramientas mejorada
+            switch (currentTool) {
+                case 'pencil':
+                case 'brush':
+                    ctx.globalCompositeOperation = 'source-over';
+                    // Si brushPattern está disponible, usarlo para el pincel, sino el color sólido
+                    ctx.strokeStyle = (currentTool === 'brush' && brushPattern) ? brushPattern : currentColor;
+                    ctx.beginPath();
+                    ctx.moveTo(lastX, lastY);
+                    ctx.lineTo(x, y);
+                    ctx.stroke();
+                    break;
+                case 'eraser':
+                    ctx.globalCompositeOperation = 'destination-out';
+                    ctx.strokeStyle = 'rgba(0,0,0,1)'; // El color no importa para borrar
+                    ctx.beginPath();
+                    ctx.moveTo(lastX, lastY);
+                    ctx.lineTo(x, y);
+                    ctx.stroke();
+                    break;
+                case 'watercolor':
+                    ctx.globalCompositeOperation = 'source-over';
+                    ctx.strokeStyle = currentColor;
+                    ctx.lineWidth = size * 1.5; // Acuarela un poco más ancha
+                    ctx.globalAlpha = 0.2; // Opacidad para el efecto de acuarela
+                    ctx.beginPath();
+                    ctx.moveTo(lastX, lastY);
+                    ctx.lineTo(x, y);
+                    ctx.stroke();
+                    ctx.globalAlpha = 1.0; // Restaurar opacidad
+                    break;
+                case 'fill':
+                    // El relleno se maneja en startPainting al hacer clic
+                    break;
+            }
+            [lastX, lastY] = [x, y]; // Actualizar la última posición
+        }
+
+        function clearCanvas() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            // Restablecer el color de fondo al limpiar
+            ctx.fillStyle = paperTypeSelect.value;
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+        }
+
+        function saveCanvas() {
+            const dataURL = canvas.toDataURL('image/png'); // Obtener la imagen como URL de datos
+            const a = document.createElement('a'); // Crear un enlace temporal
+            a.href = dataURL;
+            a.download = 'mi-dibujo-instaoldidea.png'; // Nombre del archivo
+            document.body.appendChild(a);
+            a.click(); // Simular clic para descargar
+            document.body.removeChild(a);
+        }
+
+        // Event Listeners
+        document.addEventListener('DOMContentLoaded', async () => {
+            await initializeFirebase(); // Inicializar Firebase al cargar el DOM
+
+            // Referencias a elementos del DOM
+            const thoughtInput = document.getElementById('thoughtInput');
+            const inspireButton = document.getElementById('inspireButton');
+            const loadingMessage = document.getElementById('loadingMessage');
+            const generatedIdeaContainer = document.getElementById('generatedIdeaContainer');
+            const shortDrawingIdea = document.getElementById('shortDrawingIdea');
+            const keywordsOutput = document.getElementById('keywordsOutput');
+            const pinterestQueryInput = document.getElementById('pinterestQueryInput');
+            const pinterestSearchButton = document.getElementById('pinterestSearchButton');
+
+            const color1Select = document.getElementById('color1Select');
+            const color2Select = document.getElementById('color2Select');
+            const color3Select = document.getElementById('color3Select');
+            const color1Visual = document.getElementById('color1Visual');
+            const color2Visual = document.getElementById('color2Visual');
+            const color3Visual = document.getElementById('color3Visual');
+            const combineButton = document.getElementById('combineButton');
+            const complementaryButton = document.getElementById('complementaryButton');
+            const combinedColorVisual = document.getElementById('combinedColorVisual');
+            const complementaryColorText = document.getElementById('complementaryColorText');
+            const baseColorNameSpan = document.getElementById('baseColorName');
+            const complementaryColorVisual = document.getElementById('complementaryColorVisual');
+
+            const shadowColorSelect = document.getElementById('shadowColorSelect');
+            const generateShadowsButton = document.getElementById('generateShadowsButton');
+            const shadowSuggestionsDiv = document.getElementById('shadowSuggestions');
+            const suggestedShadowColorsDiv = document.getElementById('suggestedShadowColors');
+            const shadowGradientContainer = document.getElementById('shadowGradientContainer');
+
+            // Canvas de dibujo elementos
+            canvas = document.getElementById('drawingCanvas');
+            ctx = canvas.getContext('2d');
+            
+            // Asignar referencias a las variables globales aquí
+            sizePicker = document.getElementById('sizePicker'); 
+            colorPicker = document.getElementById('colorPicker'); 
+            lineWidthDisplay = document.getElementById('lineWidthDisplay'); 
+            paperTypeSelect = document.getElementById('paperType');
+            clearCanvasButton = document.getElementById('clearCanvas');
+            saveCanvasButton = document.getElementById('saveCanvas');
+
+            // Herramientas
+            const toolPencil = document.getElementById('toolPencil');
+            const toolBrush = document.getElementById('toolBrush');
+            const toolEraser = document.getElementById('toolEraser');
+            const toolFill = document.getElementById('toolFill');
+            const toolWatercolor = document.getElementById('toolWatercolor');
+            
+            // Set initial canvas background
+            ctx.fillStyle = paperTypeSelect.value;
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+            // Cargar brushPattern después de obtener ctx
+            brushImage.onload = () => {
+                brushPattern = ctx.createPattern(brushImage, 'repeat');
+            };
+
+            // Eventos de ratón/táctiles para dibujar (usando 'pointer' para unificar)
+            canvas.addEventListener("pointerdown", startPainting);
+            canvas.addEventListener("pointerup", stopPainting);
+            canvas.addEventListener("pointerout", stopPainting);
+            canvas.addEventListener("pointermove", draw);
+
+            // Actualizar color y grosor desde los controles
+            colorPicker.addEventListener('input', (e) => {
+                currentColor = e.target.value;
+            });
+
+            sizePicker.addEventListener('input', (e) => {
+                currentLineWidth = parseInt(e.target.value);
+                lineWidthDisplay.textContent = currentLineWidth;
+            });
+
+            // Limpiar Canvas
+            clearCanvasButton.addEventListener('click', clearCanvas);
+
+            // Guardar Canvas
+            saveCanvasButton.addEventListener('click', saveCanvas);
+
+            // Cambiar Tipo de Papel (fondo del canvas)
+            paperTypeSelect.addEventListener('change', (e) => {
+                const newColor = e.target.value;
+                ctx.fillStyle = newColor;
+                ctx.fillRect(0, 0, canvas.width, canvas.height);
+            });
+
+            // Lógica para activar herramientas y resaltar botón activo
+            const toolButtons = document.querySelectorAll('.tool-button');
+            toolButtons.forEach(button => {
+                button.addEventListener('click', () => {
+                    toolButtons.forEach(btn => btn.classList.remove('active'));
+                    button.classList.add('active');
+                    currentTool = button.id.replace('tool', '').toLowerCase();
+                });
+            });
+
+            // Ajustar el tamaño del canvas a la ventana
+            const resizeCanvas = () => {
+                const dpi = window.devicePixelRatio || 1;
+                const styleWidth = canvas.clientWidth;
+                const styleHeight = canvas.clientHeight;
+                const oldImageData = ctx.getImageData(0, 0, canvas.width, canvas.height); // Guardar el contenido actual
+                
+                canvas.width = styleWidth * dpi;
+                canvas.height = styleHeight * dpi;
+                ctx.scale(dpi, dpi);
+                
+                // Restaurar el contenido y el fondo después de redimensionar
+                ctx.fillStyle = paperTypeSelect.value;
+                ctx.fillRect(0, 0, canvas.width, canvas.height);
+                ctx.putImageData(oldImageData, 0, 0); // Restaurar la imagen guardada
+            };
+            window.addEventListener('resize', resizeCanvas);
+            resizeCanvas(); // Llamar al inicio para establecer el tamaño correcto y fondo.
+
+            // Poblar los selectores de color (otras secciones)
+            populateColorSelector(color1Select, colorPalettes);
+            populateColorSelector(color2Select, colorPalettes);
+            populateColorSelector(color3Select, colorPalettes);
+            populateColorSelector(shadowColorSelect, colorPalettes);
+
+            // Evento para actualizar visualización de Color 1
+            color1Select.addEventListener('change', () => {
+                const color = color1Select.value;
+                if (color) {
+                    color1Visual.style.backgroundColor = color;
+                    color1Visual.classList.remove('hidden');
+                } else {
+                    color1Visual.classList.add('hidden');
+                }
+            });
+
+            // Evento para actualizar visualización de Color 2
+            color2Select.addEventListener('change', () => {
+                const color = color2Select.value;
+                if (color) {
+                    color2Visual.style.backgroundColor = color;
+                    color2Visual.classList.remove('hidden');
+                } else {
+                    color2Visual.classList.add('hidden');
+                }
+            });
+
+            // Evento para actualizar visualización de Color 3
+            color3Select.addEventListener('change', () => {
+                const color = color3Select.value;
+                if (color) {
+                    color3Visual.style.backgroundColor = color;
+                    color3Visual.classList.remove('hidden');
+                } else {
+                    color3Visual.classList.add('hidden');
+                }
+            });
+
+
+            // Lógica del botón "Inspírate"
+            inspireButton.addEventListener('click', async () => {
+                const thought = thoughtInput.value.trim();
+                if (thought) {
+                    loadingMessage.style.display = 'block'; // Mostrar mensaje de carga
+                    pinterestQueryInput.disabled = true; // Desactivar campo de búsqueda
+                    pinterestSearchButton.disabled = true; // Desactivar botón de búsqueda
+                    generatedIdeaContainer.classList.add('hidden'); // Ocultar salida anterior
+                    shortDrawingIdea.textContent = '';          // Limpiar contenido
+                    keywordsOutput.textContent = '';            // Limpiar contenido
+                    pinterestQueryInput.value = '';             // Limpiar campo de búsqueda
+
+                    try {
+                        let chatHistory = [];
+                        chatHistory.push({ role: "user", parts: [{ text: `Genera una idea para ilustración basándote en el siguiente pensamiento o frase. La respuesta debe ser un objeto JSON con dos campos:
+1.  "idea_corta": Una frase corta (2-4 palabras) que resuma la idea visualmente para un dibujo o ilustración.
+2.  "palabras_clave": Una lista de 3-7 palabras clave, separadas por comas, relevantes para buscar referencias visuales de la idea.
+No añadas explicaciones adicionales.
+
+Pensamiento: '${thought}'` }] });
+                        const payload = { 
+                            contents: chatHistory,
+                            generationConfig: {
+                                responseMimeType: "application/json",
+                                responseSchema: {
+                                    type: "OBJECT",
+                                    properties: {
+                                        "idea_corta": { "type": "STRING" },
+                                        "palabras_clave": { "type": "STRING" }
+                                    },
+                                    "propertyOrdering": ["idea_corta", "palabras_clave"]
+                                }
+                            }
+                        };
+                        const apiKey = ""; // Dejar como está para que Canvas la provea
+                        const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${apiKey}`;
+
+                        const response = await fetch(apiUrl, {
+                            method: 'POST',
+                            headers: { 'Content-Type': 'application/json' },
+                            body: JSON.stringify(payload)
+                        });
+
+                        const result = await response.json();
+
+                        if (result.candidates && result.candidates.length > 0 &&
+                            result.candidates[0].content && result.candidates[0].content.parts &&
+                            result.candidates[0].content.parts.length > 0) {
+                            const json = result.candidates[0].content.parts[0].text;
+                            const jsonResponse = JSON.parse(json);
+                            const shortIdea = jsonResponse.idea_corta;
+                            const keywords = jsonResponse.palabras_clave;
+                            
+                            shortDrawingIdea.textContent = shortIdea;
+                            keywordsOutput.textContent = keywords;
+                            generatedIdeaContainer.classList.remove('hidden'); // Mostrar el contenedor
+
+                            pinterestQueryInput.disabled = false; // Habilitar el campo de búsqueda
+                            pinterestSearchButton.disabled = false; // Habilitar el botón de búsqueda
+
+                            // Guardar en Firestore
+                            if (db && userId) {
+                                try {
+                                    const ideasCollectionRef = collection(db, `artifacts/${appId}/users/${userId}/drawing_ideas`);
+                                    await addDoc(ideasCollectionRef, {
+                                        thought: thought,
+                                        shortIdea: shortIdea,
+                                        keywords: keywords,
+                                        timestamp: new Date()
+                                    });
+                                    console.log("Idea concisa y palabras clave guardadas en Firestore.");
+                                } catch (dbError) {
+                                    console.error("Error al guardar la idea en Firestore:", dbError);
+                                }
+                            }
+
+                        } else {
+                            shortDrawingIdea.textContent = "No se pudo generar una idea.";
+                            keywordsOutput.textContent = "";
+                            generatedIdeaContainer.classList.remove('hidden');
+                            pinterestQueryInput.disabled = true;
+                            pinterestSearchButton.disabled = true;
+                        }
+                    } catch (error) {
+                        console.error("Error al obtener la idea:", error);
+                        shortDrawingIdea.textContent = "Error al conectar con la IA.";
+                        keywordsOutput.textContent = "";
+                        generatedIdeaContainer.classList.remove('hidden');
+                        pinterestQueryInput.disabled = true;
+                        pinterestSearchButton.disabled = true;
+                    } finally {
+                        loadingMessage.style.display = 'none'; // Ocultar mensaje de carga
+                    }
+                } else {
+                    shortDrawingIdea.textContent = "Por favor, escribe algo para inspirarte.";
+                    keywordsOutput.textContent = "";
+                    generatedIdeaContainer.classList.remove('hidden');
+                    pinterestQueryInput.disabled = true;
+                    pinterestSearchButton.disabled = true;
+                }
+            });
+
+            // Lógica del botón de búsqueda de Pinterest
+            pinterestSearchButton.addEventListener('click', () => {
+                const query = pinterestQueryInput.value.trim();
+                if (query) {
+                    const url = `https://www.pinterest.com/search/pins/?q=${encodeURIComponent(query)}`;
+                    window.open(url, '_blank');
+                }
+            });
+
+            // Lógica del campo de búsqueda de Pinterest (al presionar Enter)
+            pinterestQueryInput.addEventListener('keydown', (event) => {
+                if (event.key === 'Enter') {
+                    pinterestSearchButton.click(); // Simular clic en el botón
+                }
+            });
+
+            // Lógica del botón "Combinar"
+            combineButton.addEventListener('click', () => {
+                const color1 = color1Select.value;
+                const color2 = color2Select.value;
+                const color3 = color3Select.value;
+
+                if (color1 && color2) { // Al menos dos colores deben estar seleccionados
+                    const combined = combineColors(color1, color2, color3); // Pasar los tres colores
+                    if (combined) {
+                        combinedColorVisual.style.backgroundColor = combined;
+                        combinedColorVisual.classList.remove('hidden');
+                    } else {
+                        combinedColorVisual.classList.add('hidden');
+                        console.error("No se pudieron combinar los colores. Revise la selección.");
+                    }
+                } else {
+                    combinedColorVisual.classList.add('hidden');
+                    console.error("Por favor, selecciona al menos dos colores válidos para combinar.");
+                }
+            });
+
+            // Lógica del botón "Complementario
+            complementaryButton.addEventListener('click', () => {
+                const color = color1Select.value; // Usamos el primer color para el complementario
+
+                if (color) {
+                    const complementary = getComplementaryColor(color);
+                    if (complementary) {
+                        // Obtener el nombre del color seleccionado para mostrarlo
+                        const selectedOptionText = color1Select.options[color1Select.selectedIndex].text;
+                        const colorNameMatch = selectedOptionText.match(/^(.*?)\s\(#[\dA-Fa-f]{6}\)$/);
+                        const displayColorName = colorNameMatch ? colorNameMatch[1] : selectedOptionText;
+
+                        baseColorNameSpan.textContent = displayColorName;
+                        complementaryColorVisual.style.backgroundColor = complementary;
+                        complementaryColorText.classList.remove('hidden');
+                        complementaryColorVisual.classList.remove('hidden');
+                        combinedColorVisual.classList.add('hidden'); // Ocultar el resultado de combinar si se muestra el complementario
+                    } else {
+                        complementaryColorText.classList.add('hidden');
+                        complementaryColorVisual.classList.add('hidden');
+                        console.error("No se pudo obtener el color complementario. Revise la selección.");
+                    }
+                } else {
+                    complementaryColorText.classList.add('hidden');
+                    complementaryColorVisual.classList.add('hidden');
+                    console.error("Por favor, selecciona un color válido para obtener su complementario.");
+                }
+            });
+
+            // Lógica del botón "Generar Sombras"
+            generateShadowsButton.addEventListener('click', () => {
+                const baseColor = shadowColorSelect.value;
+                if (!baseColor) {
+                    console.error("Por favor, selecciona un color válido para generar sombras.");
+                    shadowSuggestionsDiv.classList.add('hidden');
+                    return;
+                }
+
+                const rgb = colorToRgb(baseColor);
+                if (!rgb) {
+                    console.error("No se pudo procesar el color para las sombras. Revise la selección.");
+                    shadowSuggestionsDiv.classList.add('hidden');
+                    return;
+                }
+
+                suggestedShadowColorsDiv.innerHTML = '';
+                shadowGradientContainer.innerHTML = '';
+                shadowSuggestionsDiv.classList.remove('hidden');
+
+                const r = rgb[0], g = rgb[1], b = rgb[2];
+
+                // Sugerencias de sombras (oscureciendo el color base)
+                const shadowColors = [
+                    rgbToHex(Math.max(0, r - 30), Math.max(0, g - 30), Math.max(0, b - 30)),
+                    rgbToHex(Math.max(0, r - 60), Math.max(0, g - 60), Math.max(0, b - 60)),
+                    rgbToHex(Math.max(0, r - 90), Math.max(0, g - 90), Math.max(0, b - 90))
+                ];
+
+                shadowColors.forEach(color => {
+                    const div = document.createElement('div');
+                    div.className = 'color-box';
+                    div.style.backgroundColor = color;
+                    suggestedShadowColorsDiv.appendChild(div);
+                });
+
+                // Ejemplo de degradado
+                const gradientSteps = 5;
+                for (let i = 0; i <= gradientSteps; i++) {
+                    const ratio = i / gradientSteps;
+                    const mixedR = Math.floor(r * (1 - ratio) + (rgb[0] - 90) * ratio); // Oscurecer progresivamente
+                    const mixedG = Math.floor(g * (1 - ratio) + (rgb[1] - 90) * ratio);
+                    const mixedB = Math.floor(b * (1 - ratio) + (rgb[2] - 90) * ratio);
+
+                    const div = document.createElement('div');
+                    div.className = 'shadow-gradient-box';
+                    div.style.backgroundColor = rgbToHex(Math.max(0, mixedR), Math.max(0, mixedG), Math.max(0, mixedB));
+                    shadowGradientContainer.appendChild(div);
+                }
+            });
+        });
+    </script>
+</body>
+</html>
