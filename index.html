@@ -345,7 +345,7 @@
             <h2 class="section-title">¡Inspírate para tu próxima obra!</h2>
             <p class="mb-4 text-center">Ingresa lo que estás pensando y obtén una idea para dibujar o diseñar.</p>
             <div class="flex flex-col md:flex-row items-center space-y-4 md:space-y-0 md:space-x-4">
-                <textarea id="thoughtInput" class="input-field w-full md:w-3/5 h-24" placeholder="Estoy pensando en mi comida, en que agarré un taxi, en que salí cansado de trabajar..."></textarea>
+                <textarea id="thoughtInput" class="input-field w-full md:w-3/5 h-24" placeholder="Ingresa tu idea (1 a 6 palabras)..."></textarea>
                 <div class="flex flex-col space-y-4 w-full md:w-2/5">
                     <button id="inspireButton" class="button-primary w-full">¡Inspírate!</button>
                     
@@ -357,9 +357,9 @@
 
                     <div class="pinterest-search-group mt-4">
                         <!-- Recuadro para ingreso de búsqueda del dibujante -->
-                        <input type="text" id="pinterestQueryInput" class="input-field w-full" placeholder="Ingresa tu búsqueda para Pinterest..." disabled>
+                        <input type="text" id="pinterestQueryInput" class="input-field w-full" placeholder="Busca tus referentes" >
                         <!-- Botón con símbolo de pincel -->
-                        <button id="pinterestSearchButton" class="button-primary w-full flex items-center justify-center space-x-2" disabled>
+                        <button id="pinterestSearchButton" class="button-primary w-full flex items-center justify-center space-x-2" >
                             <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
                                 <path d="M17.414 2.586a2 2 0 00-2.828 0L7 10.172V13h2.828l7.586-7.586a2 2 0 000-2.828z" />
                                 <path fill-rule="evenodd" d="M2 6a2 2 0 012-2h4a1 1 0 010 2H4v10h10v-4a1 1 0 112 0v4a2 2 0 01-2 2H4a2 2 0 01-2-2V6z" clip-rule="evenodd" />
@@ -904,7 +904,7 @@
                 case 'brush':
                     ctx.globalCompositeOperation = 'source-over';
                     // Si brushPattern está disponible, usarlo para el pincel, sino el color sólido
-                    ctx.strokeStyle = (currentTool === 'brush' && brushPattern) ? brushPattern : currentColor;
+                    ctx.strokeStyle = (currentTool === 'brush' && brushPattern) ? ctx.createPattern(brushImage, 'repeat') : currentColor;
                     ctx.beginPath();
                     ctx.moveTo(lastX, lastY);
                     ctx.lineTo(x, y);
@@ -1011,7 +1011,10 @@
 
             // Cargar brushPattern después de obtener ctx
             brushImage.onload = () => {
-                brushPattern = ctx.createPattern(brushImage, 'repeat');
+                // Asegúrate de que ctx esté disponible antes de crear el patrón
+                if (ctx) {
+                    brushPattern = ctx.createPattern(brushImage, 'repeat');
+                }
             };
 
             // Eventos de ratón/táctiles para dibujar (usando 'pointer' para unificar)
@@ -1112,106 +1115,48 @@
             });
 
 
-            // Lógica del botón "Inspírate"
-            inspireButton.addEventListener('click', async () => {
+            // Lógica del botón "Inspírate" (Actualizada para no usar API)
+            inspireButton.addEventListener('click', () => {
                 const thought = thoughtInput.value.trim();
                 if (thought) {
-                    loadingMessage.style.display = 'block'; // Mostrar mensaje de carga
-                    pinterestQueryInput.disabled = true; // Desactivar campo de búsqueda
-                    pinterestSearchButton.disabled = true; // Desactivar botón de búsqueda
-                    generatedIdeaContainer.classList.add('hidden'); // Ocultar salida anterior
-                    shortDrawingIdea.textContent = '';          // Limpiar contenido
-                    keywordsOutput.textContent = '';            // Limpiar contenido
-                    pinterestQueryInput.value = '';             // Limpiar campo de búsqueda
+                    // Mostrar la idea y las palabras clave directamente del input del usuario
+                    shortDrawingIdea.textContent = thought;
+                    keywordsOutput.textContent = "Palabras clave sugeridas: " + thought + ", dibujo, ilustración, arte, diseño"; 
+                    generatedIdeaContainer.classList.remove('hidden'); // Mostrar el contenedor
 
-                    try {
-                        let chatHistory = [];
-                        chatHistory.push({ role: "user", parts: [{ text: `Genera una idea para ilustración basándote en el siguiente pensamiento o frase. La respuesta debe ser un objeto JSON con dos campos:
-1.  "idea_corta": Una frase corta (2-4 palabras) que resuma la idea visualmente para un dibujo o ilustración.
-2.  "palabras_clave": Una lista de 3-7 palabras clave, separadas por comas, relevantes para buscar referencias visuales de la idea.
-No añadas explicaciones adicionales.
+                    // Habilitar el campo de búsqueda de Pinterest y el botón (ya no se deshabilitan por defecto)
+                    // pinterestQueryInput.disabled = false; // Removido
+                    // pinterestSearchButton.disabled = false; // Removido
 
-Pensamiento: '${thought}'` }] });
-                        const payload = { 
-                            contents: chatHistory,
-                            generationConfig: {
-                                responseMimeType: "application/json",
-                                responseSchema: {
-                                    type: "OBJECT",
-                                    properties: {
-                                        "idea_corta": { "type": "STRING" },
-                                        "palabras_clave": { "type": "STRING" }
-                                    },
-                                    "propertyOrdering": ["idea_corta", "palabras_clave"]
-                                }
-                            }
-                        };
-                        const apiKey = ""; // Dejar como está para que Canvas la provea
-                        const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${apiKey}`;
-
-                        const response = await fetch(apiUrl, {
-                            method: 'POST',
-                            headers: { 'Content-Type': 'application/json' },
-                            body: JSON.stringify(payload)
-                        });
-
-                        const result = await response.json();
-
-                        if (result.candidates && result.candidates.length > 0 &&
-                            result.candidates[0].content && result.candidates[0].content.parts &&
-                            result.candidates[0].content.parts.length > 0) {
-                            const json = result.candidates[0].content.parts[0].text;
-                            const jsonResponse = JSON.parse(json);
-                            const shortIdea = jsonResponse.idea_corta;
-                            const keywords = jsonResponse.palabras_clave;
-                            
-                            shortDrawingIdea.textContent = shortIdea;
-                            keywordsOutput.textContent = keywords;
-                            generatedIdeaContainer.classList.remove('hidden'); // Mostrar el contenedor
-
-                            pinterestQueryInput.disabled = false; // Habilitar el campo de búsqueda
-                            pinterestSearchButton.disabled = false; // Habilitar el botón de búsqueda
-
-                            // Guardar en Firestore
-                            if (db && userId) {
-                                try {
-                                    const ideasCollectionRef = collection(db, `artifacts/${appId}/users/${userId}/drawing_ideas`);
-                                    await addDoc(ideasCollectionRef, {
-                                        thought: thought,
-                                        shortIdea: shortIdea,
-                                        keywords: keywords,
-                                        timestamp: new Date()
-                                    });
-                                    console.log("Idea concisa y palabras clave guardadas en Firestore.");
-                                } catch (dbError) {
-                                    console.error("Error al guardar la idea en Firestore:", dbError);
-                                }
-                            }
-
-                        } else {
-                            shortDrawingIdea.textContent = "No se pudo generar una idea.";
-                            keywordsOutput.textContent = "";
-                            generatedIdeaContainer.classList.remove('hidden');
-                            pinterestQueryInput.disabled = true;
-                            pinterestSearchButton.disabled = true;
+                    // Pre-rellenar el campo de búsqueda de Pinterest con la idea
+                    pinterestQueryInput.value = thought;
+                    
+                    // Firestore (manteniendo la estructura para guardar la idea sin IA)
+                    if (db && userId) {
+                        try {
+                            const ideasCollectionRef = collection(db, `artifacts/${appId}/users/${userId}/drawing_ideas`);
+                            addDoc(ideasCollectionRef, {
+                                thought: thought,
+                                shortIdea: thought, // Guardar el input del usuario como idea corta
+                                keywords: keywordsOutput.textContent,  // Guardar las palabras clave sugeridas
+                                timestamp: new Date()
+                            });
+                            console.log("Idea y palabras clave guardadas en Firestore (sin IA).");
+                        } catch (dbError) {
+                            console.error("Error al guardar la idea en Firestore:", dbError);
                         }
-                    } catch (error) {
-                        console.error("Error al obtener la idea:", error);
-                        shortDrawingIdea.textContent = "Error al conectar con la IA.";
-                        keywordsOutput.textContent = "";
-                        generatedIdeaContainer.classList.remove('hidden');
-                        pinterestQueryInput.disabled = true;
-                        pinterestSearchButton.disabled = true;
-                    } finally {
-                        loadingMessage.style.display = 'none'; // Ocultar mensaje de carga
                     }
+
                 } else {
                     shortDrawingIdea.textContent = "Por favor, escribe algo para inspirarte.";
                     keywordsOutput.textContent = "";
                     generatedIdeaContainer.classList.remove('hidden');
-                    pinterestQueryInput.disabled = true;
-                    pinterestSearchButton.disabled = true;
+                    // Los campos de búsqueda de Pinterest ya no se deshabilitan
+                    // pinterestQueryInput.disabled = true; // Removido
+                    // pinterestSearchButton.disabled = true; // Removido
                 }
+                // loadingMessage ya no es necesario para esta lógica instantánea, pero se mantiene en el HTML por si se vuelve a usar.
+                loadingMessage.style.display = 'none'; 
             });
 
             // Lógica del botón de búsqueda de Pinterest
